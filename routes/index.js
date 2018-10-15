@@ -8,6 +8,15 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Wangzz' });
 });
 
+router.get('/showip',function(req,res,next) {
+  var serverIP=getIPAdress();
+  //var clientIP=req.ip
+  msg="Server IP is: " + serverIP;
+  msg+="<br />Client IP is: " + req.ip.match(/\d+\.\d+\.\d+\.\d+/);
+  res.send(msg);
+  
+});
+
 router.get('/test',function(req, res, next){
     res.setHeader('Last-Modified', (new Date()).toUTCString());
     //var args=URL.parse(req.url,true).query;
@@ -76,5 +85,18 @@ router.get('/imagesearch/addpic', function (req, res, next) {
     console.log("Error Message: ", err);
   });
 });
+
+function getIPAdress() {
+  var interfaces = require('os').networkInterfaces();　　
+  for (var devName in interfaces) {　　　　
+      var iface = interfaces[devName];　　　　　　
+      for (var i = 0; i < iface.length; i++) {
+          var alias = iface[i];
+          if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
+              return alias.address;
+          }
+      }　　
+  }
+}
 
 module.exports = router;
