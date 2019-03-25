@@ -5,6 +5,15 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
+    <script src="https://cdn.auth0.com/js/lock/11.14.1/lock.min.js"></script>
+    <script>
+        var lock = new Auth0Lock(
+          'dG11rEPaqPG-gKdaZa6PcsxJrRl_TYMw',
+          'wangzz.au.auth0.com'
+          );
+        lock.show();
+        
+    </script>
     <h1><%= title %></h1>
     <p>This is my web site <%= title %></p>
   </body>
