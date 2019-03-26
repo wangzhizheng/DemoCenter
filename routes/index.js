@@ -5,7 +5,7 @@ var path=require('path');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Wangzz' });
+  res.render('index', { title: 'Plazz 42' });
 });
 
 router.get('/showip',function(req,res,next) {
