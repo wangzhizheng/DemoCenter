@@ -5,7 +5,11 @@ var path=require('path');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Plazz 42' });
+  res.render('index', { title: 'Pizza 42' });
+});
+
+router.get('/pizzaorder',function(req,res,next){
+  res.render('pizzaorder',{});
 });
 
 router.get('/showip',function(req,res,next) {
