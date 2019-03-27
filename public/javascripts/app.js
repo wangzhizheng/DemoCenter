@@ -42,6 +42,10 @@ window.addEventListener('load', function() {
           localLogin(authResult);
           loginBtn.style.display = 'none';
           homeView.style.display = 'inline-block';
+          webAuth.client.userInfo(authResult.accessToken,function(err,user){
+            console.log(user.toString);
+            localStorage.setItem('username',user.user_id);
+          });
         } else if (err) {
           homeView.style.display = 'inline-block';
           console.log(err);
@@ -49,13 +53,16 @@ window.addEventListener('load', function() {
             'Error: ' + err.error + '. Check the console for further details.'
           );
         }
+        
         displayButtons();
       });
+      
     }
   
     function localLogin(authResult) {
       // Set isLoggedIn flag in localStorage
       localStorage.setItem('isLoggedIn', 'true');
+      //localStorage.setItem('loginusername',loginusername);
       // Set the time that the access token will expire at
       expiresAt = JSON.stringify(
         authResult.expiresIn * 1000 + new Date().getTime()
@@ -100,7 +107,8 @@ window.addEventListener('load', function() {
       if (isAuthenticated()) {
         loginBtn.style.display = 'none';
         logoutBtn.style.display = 'inline-block';
-        loginStatus.innerHTML = 'You are logged in!';
+        var loginMessage="Hi " + localStorage.getItem('username')+ "! You are logged in!"
+        loginStatus.innerHTML = loginMessage;
       } else {
         loginBtn.style.display = 'inline-block';
         logoutBtn.style.display = 'none';
