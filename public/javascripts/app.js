@@ -3,12 +3,13 @@ window.addEventListener('load', function() {
     var idToken;
     var accessToken;
     var expiresAt;
+    var emailverified;
 
     var webAuth = new auth0.WebAuth({
         domain: 'wangzz.au.auth0.com',
         clientID: 'dG11rEPaqPG-gKdaZa6PcsxJrRl_TYMw',
         responseType: 'token id_token',
-        scope: 'openid',
+        scope: 'openid profile email',
         redirectUri: window.location.href
     });
 
@@ -42,10 +43,10 @@ window.addEventListener('load', function() {
           localLogin(authResult);
           loginBtn.style.display = 'none';
           homeView.style.display = 'inline-block';
-          webAuth.client.userInfo(authResult.accessToken,function(err,user){
-            console.log(user.toString);
-            localStorage.setItem('username',user.user_id);
-          });
+          // webAuth.client.userInfo(authResult.accessToken,function(err,user){
+          //   localStorage.setItem('username',user.name);
+          //   emailverified=user.email_verified;
+          // });
         } else if (err) {
           homeView.style.display = 'inline-block';
           console.log(err);
@@ -62,6 +63,7 @@ window.addEventListener('load', function() {
     function localLogin(authResult) {
       // Set isLoggedIn flag in localStorage
       localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('username',authResult.idTokenPayload.name);
       //localStorage.setItem('loginusername',loginusername);
       // Set the time that the access token will expire at
       expiresAt = JSON.stringify(
@@ -69,6 +71,7 @@ window.addEventListener('load', function() {
       );
       accessToken = authResult.accessToken;
       idToken = authResult.idToken;
+      emailverified=authResult.idTokenPayload.email_verified;
     }
   
     function renewTokens() {
@@ -88,6 +91,7 @@ window.addEventListener('load', function() {
     function logout() {
       // Remove isLoggedIn flag from localStorage
       localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('username');
       // Remove tokens and expiry time
       accessToken = '';
       idToken = '';
@@ -107,7 +111,12 @@ window.addEventListener('load', function() {
       if (isAuthenticated()) {
         loginBtn.style.display = 'none';
         logoutBtn.style.display = 'inline-block';
-        var loginMessage="Hi " + localStorage.getItem('username')+ "! You are logged in!"
+        var loginMessage="Hi " + localStorage.getItem('username')+ "! You are logged in!</br>"
+        if (emailverified){
+          loginMessage =loginMessage + 'Now you can order a pizza!'
+        }else{
+          loginMessage =loginMessage + 'But sorry, you need to verify your email before order a pizza.'
+        }
         loginStatus.innerHTML = loginMessage;
       } else {
         loginBtn.style.display = 'inline-block';
